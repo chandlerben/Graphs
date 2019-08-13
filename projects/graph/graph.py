@@ -57,19 +57,19 @@ class Graph:
 
         s.push(starting_vertex)
 
-        found = [starting_vertex]
+        found = []
 
         while s.size() > 0:
-            flag = False
-            for vertex in self.vertices[s.stack[-1]]:
-                if vertex not in found:
-                    s.push(vertex)
-                    found.append(vertex)
-                    flag = True
-                else:
-                    s.pop()
-            if flag == False:
-                s.pop()
+            current = s.pop()
+            if current not in found:
+                found.append(current)
+                for next_vert in self.vertices[current]:
+                    s.push(next_vert)
+
+            # for vertex in self.vertices[s.stack[-1]]:
+            #     if vertex not in found:
+            #         s.push(vertex)
+            #         found.append(vertex)
 
         print(f'DFT: {found}')
 
@@ -85,6 +85,7 @@ class Graph:
         for vertex in self.vertices[starting_vertex]:
             if vertex not in path:
                 path = self.dft_recursive(vertex, path)
+
         return path
 
         # TODO
@@ -97,21 +98,33 @@ class Graph:
         """
         q = Queue()
 
-        q.enqueue(starting_vertex)
+        q.enqueue([starting_vertex])
 
-        found = [starting_vertex]
+        found = []
 
         while q.size() > 0:
-            for vertex in self.vertices[q.queue[0]]:
-                if vertex == destination_vertex:
-                    q.enqueue(vertex)
-                    found.append(vertex)
-                    break
-                elif vertex not in found:
-                    q.enqueue(vertex)
-                    found.append(vertex)
-            q.dequeue()
-        print(f'BFT solution: {found}')
+            path = q.dequeue()
+            v = path[-1]
+
+            if v not in found:
+                if v == destination_vertex:
+                    return path
+                found.append(v)
+                for next_vert in self.vertices[v]:
+                    new_path = list(path)
+                    new_path.append(next_vert)
+                    q.enqueue(new_path)
+
+            # for vertex in self.vertices[q.queue[0]]:
+            #     if vertex == destination_vertex:
+            #         q.enqueue(vertex)
+            #         found.append(vertex)
+            #         break
+            #     elif vertex not in found:
+            #         q.enqueue(vertex)
+            #         found.append(vertex)
+            # q.dequeue()
+        # print(f'BFT solution: {found}')
 
     def dfs(self, starting_vertex, destination_vertex):
         """
@@ -119,7 +132,24 @@ class Graph:
         starting_vertex to destination_vertex in
         depth-first order.
         """
-        pass  # TODO
+        s = Stack()
+
+        s.push([starting_vertex])
+
+        found = []
+
+        while s.size() > 0:
+            path = s.pop()
+            v = path[-1]
+
+            if v not in found:
+                if v == destination_vertex:
+                    return path
+                found.append(v)
+                for next_vert in self.vertices[v]:
+                    new_path = list(path)
+                    new_path.append(next_vert)
+                    s.push(new_path)
 
 
 if __name__ == '__main__':
@@ -188,11 +218,11 @@ if __name__ == '__main__':
     Valid BFS path:
         [1, 2, 4, 6]
     '''
-    print(graph.bfs(1, 6))
+    print(f'BFS: {graph.bfs(1, 6)}')
 
     '''
     Valid DFS paths:
         [1, 2, 4, 6]
         [1, 2, 4, 7, 6]
     '''
-    print(graph.dfs(1, 6))
+    print(f'DFS: {graph.dfs(1, 6)}')
