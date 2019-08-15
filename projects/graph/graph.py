@@ -103,17 +103,29 @@ class Graph:
         found = []
 
         while q.size() > 0:
+            print(f'queue before dequeue = {q}')
             path = q.dequeue()
+            print(f'path = {path}')
             v = path[-1]
+            print(f'v = {v}')
 
             if v not in found:
                 if v == destination_vertex:
                     return path
+
                 found.append(v)
+                print(f'found = {found}')
+                print()
                 for next_vert in self.vertices[v]:
+                    print(f'v = {v}')
+                    print(f'self.vertices[v] = {self.vertices[v]}')
+                    print(f'next_vert = {next_vert}')
                     new_path = list(path)
+                    print(f'new_path = {new_path}')
                     new_path.append(next_vert)
+                    print(f'new_path = {new_path}')
                     q.enqueue(new_path)
+                    print(f'queue with new_path = {q}')
 
             # for vertex in self.vertices[q.queue[0]]:
             #     if vertex == destination_vertex:
@@ -186,7 +198,7 @@ if __name__ == '__main__':
         1, 2, 4, 7, 6, 3, 5
         1, 2, 4, 6, 3, 5, 7
     '''
-    graph.dft(1)
+    # graph.dft(1)
 
     '''
     Valid BFT paths:
@@ -203,7 +215,7 @@ if __name__ == '__main__':
         1, 2, 4, 3, 7, 6, 5
         1, 2, 4, 3, 7, 5, 6
     '''
-    graph.bft(1)
+    # graph.bft(1)
 
     '''
     Valid DFT recursive paths:
@@ -212,7 +224,7 @@ if __name__ == '__main__':
         1, 2, 4, 7, 6, 3, 5
         1, 2, 4, 6, 3, 5, 7
     '''
-    print(f'DFT Recursion: {graph.dft_recursive(1)}')
+    # print(f'DFT Recursion: {graph.dft_recursive(1)}')
 
     '''
     Valid BFS path:
@@ -225,4 +237,4 @@ if __name__ == '__main__':
         [1, 2, 4, 6]
         [1, 2, 4, 7, 6]
     '''
-    print(f'DFS: {graph.dfs(1, 6)}')
+    # print(f'DFS: {graph.dfs(1, 6)}')
